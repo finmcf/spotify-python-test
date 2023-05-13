@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>Spotify Profile Information</h2>
+    <p id="displayName">Display Name: {{ profile.display_name }}</p>
+    <img id="avatar" src="{{ profile.images[0].url }}" alt="Avatar" />
+    <p id="id">ID: {{ profile.id }}</p>
+    <p id="email">Email: {{ profile.email }}</p>
+    <p id="uri">
+      URI: <a href="{{ profile.external_urls.spotify }}">{{ profile.uri }}</a>
+    </p>
+    <p id="url">URL: <a href="{{ profile.href }}">{{ profile.href }}</a></p>
+    <p id="imgUrl">Image URL: {{ profile.images[0].url }}</p>
+  </body>
+</html>
