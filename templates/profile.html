@@ -11,5 +11,16 @@
     </p>
     <p id="url">URL: <a href="{{ profile.href }}">{{ profile.href }}</a></p>
     <p id="imgUrl">Image URL: {{ profile.images[0].url }}</p>
+
+    <h2>Playlists</h2>
+    {% for playlist in playlists %}
+    <h3>Playlist: {{ playlist.name }}</h3>
+    <h4>Tracks:</h4>
+    <ul>
+      {% for track in playlist.tracks %}
+      <li>{{ track.track.name }} by {{ track.track.artists[0].name }}</li>
+      {% endfor %}
+    </ul>
+    {% endfor %}
   </body>
 </html>

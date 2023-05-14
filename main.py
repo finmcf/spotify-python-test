@@ -32,7 +32,7 @@ def home():
         'client_id': CLIENT_ID,
         'response_type': 'code',
         'redirect_uri': REDIRECT_URI,
-        'scope': 'user-read-private user-read-email',
+        'scope': 'user-read-private user-read-email playlist-read-private playlist-read-collaborative',
         'code_challenge_method': 'S256',
         'code_challenge': challenge,
     }
@@ -55,10 +55,24 @@ def callback():
     response.raise_for_status()
     access_token = response.json()['access_token']
     headers = {'Authorization': f'Bearer {access_token}'}
+    
+    # Fetch user's profile
     response = requests.get('https://api.spotify.com/v1/me', headers=headers)
     response.raise_for_status()
     profile = response.json()
-    return render_template_string(open('templates/profile.html').read(), profile=profile)
+    
+    # Fetch user's playlists
+    response = requests.get('https://api.spotify.com/v1/me/playlists', headers=headers)
+    response.raise_for_status()
+    playlists = response.json()['items']
+
+    # Fetch tracks for each playlist
+    for playlist in playlists:
+        response = requests.get(f'https://api.spotify.com/v1/playlists/{playlist["id"]}/tracks', headers=headers)
+        response.raise_for_status()
+        playlist['tracks'] = response.json()['items']
+
+    return render_template_string(open('templates/profile.html').read(), profile=profile, playlists=playlists)
 
 if __name__ == '__main__':
     app.run(port=5173)
